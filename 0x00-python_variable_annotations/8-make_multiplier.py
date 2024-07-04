@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-Takes a float multiplier and returns a function that multiplies a float by the multiplier.
+Takes a float multiplier and returns a function that multiplies .
 """
 
 
 from typing import Callable
+
 
 def make_multiplier(multiplier: float) -> Callable[[float], float]:
     """
@@ -12,5 +13,5 @@ def make_multiplier(multiplier: float) -> Callable[[float], float]:
     """
     def multiplier_function(value: float) -> float:
         return value * multiplier
-    
+
     return multiplier_function
