@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 """Adds two float numbers and returns their sum as float."""
 
 
