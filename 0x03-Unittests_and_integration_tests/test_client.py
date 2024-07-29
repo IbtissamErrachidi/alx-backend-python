@@ -4,8 +4,9 @@ Test for GithubOrgClient class
 """
 import unittest
 from unittest.mock import patch
-from client import GithubOrgClient
 from parameterized import parameterized
+
+GithubOrgClient = __import__('client').GithubOrgClient
 
 
 class TestGithubOrgClient(unittest.TestCase):
