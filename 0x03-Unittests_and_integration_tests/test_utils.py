@@ -50,11 +50,15 @@ class TestGetJson(unittest.TestCase):
         mock_requests_get.assert_called_once_with(test_url)
 
 class TestMemoize(unittest.TestCase):
+    """
+    Test the memoization decorator, memoize
+    """
 
     def test_memoize(self):
         """
         Test that the memoize decorator correctly caches method results.
         """
+
         class TestClass:
             
             def a_method(self):
