@@ -31,25 +31,20 @@ class TestAccessNestedMap(unittest.TestCase):
             access_nested_map(nested_map, path)
         # Verify that the exception message is as expected
         self.assertEqual(str(cm.exception), repr(path[-1]))
-
 class TestGetJson(unittest.TestCase):
     """
     Test the get_json function
     """
-
     @parameterized.expand([
         ("http://example.com", {"payload": True}),
         ("http://holberton.io", {"payload": False})
     ])
-    @patch('requests.get')
-    def test_get_json(self, mock_get, test_url, test_payload):
+    @patch("requests.get")
+    def test_get_json(self, test_url, test_payload, mock_requests_get):
         """
-        Test get_json function with mocked requests.get.
+        Test the get_json method to ensure it returns the expected output.
         """
-        mock_get.return_value.json.return_value = test_payload
-
+        mock_requests_get.return_value.json.return_value = test_payload
         result = get_json(test_url)
-
-        mock_get.assert_called_once_with(test_url)
-
         self.assertEqual(result, test_payload)
+        mock_requests_get.assert_called_once_with(test_url)
