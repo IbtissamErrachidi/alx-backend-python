@@ -33,7 +33,7 @@ class TestAccessNestedMap(unittest.TestCase):
         self.assertEqual(str(cm.exception), repr(path[-1]))
 
 class TestGetJson(unittest.TestCase):
-     """
+    """
     Test the get_json function
     """
 
@@ -47,9 +47,9 @@ class TestGetJson(unittest.TestCase):
         Test get_json function with mocked requests.get.
         """
         mock_get.return_value.json.return_value = test_payload
-        
+
         result = get_json(test_url)
-        
+
         mock_get.assert_called_once_with(test_url)
-        
+
         self.assertEqual(result, test_payload)
