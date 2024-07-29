@@ -23,15 +23,27 @@ class TestGithubOrgClient(unittest.TestCase):
         """
         Test that GithubOrgClient.org returns the correct value.
         """
-        # Define the mock return value for get_json
+
         mock_get_json.return_value = {"org": org_name}
 
-        # Create an instance of GithubOrgClient with the test org name
         client = GithubOrgClient(org_name)
 
-        # Call the org method and verify the return value
         result = client.org
         self.assertEqual(result, {"org": org_name})
 
-        # Verify that get_json was called once with the expected argument
         mock_get_json.assert_called_once_with(f'https://api.github.com/orgs/{org_name}')
+
+    @patch.object(GithubOrgClient, 'org', new_callable=property)
+    def test_public_repos_url(self, mock_org):
+        """
+        Test that _public_repos_url returns the expected URL based on the mocked org property.
+        """
+
+        mock_org.return_value = {
+            "repos_url": "https://api.github.com/orgs/test_org/repos"
+        }
+
+        client = GithubOrgClient("test_org")
+
+        expected_url = "https://api.github.com/orgs/test_org/repos"
+        self.assertEqual(client._public_repos_url, expected_url)
