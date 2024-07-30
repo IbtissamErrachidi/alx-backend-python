@@ -5,6 +5,7 @@ Test for GithubOrgClient class
 import unittest
 from unittest.mock import patch
 from parameterized import parameterized
+from fixtures import org_payload, repos_payload, expected_repos, apache2_repos
 
 GithubOrgClient = __import__('client').GithubOrgClient
 
@@ -109,3 +110,61 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     def tearDownClass(cls) -> None:
         """Removes the class fixtures after running all tests."""
         cls.get_patcher.stop()
+
+
+@parameterized_class([
+    {"org_payload": org_payload, "repos_payload": repos_payload, "expected_repos": expected_repos, "apache2_repos": apache2_repos},
+])
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """
+    Integration tests for GithubOrgClient class
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        """
+        Setup the mock for requests.get
+        """
+        cls.get_patcher = patch('requests.get')
+        cls.mock_get = cls.get_patcher.start()
+
+        # Setup side_effects to return appropriate fixtures based on URL
+        def side_effect(url):
+            if url == 'https://api.github.com/orgs/test_org':
+                return MockResponse(cls.org_payload)
+            elif url == 'https://api.github.com/orgs/test_org/repos':
+                return MockResponse(cls.repos_payload)
+            else:
+                return MockResponse({})
+
+        cls.mock_get.side_effect = side_effect
+
+    @classmethod
+    def tearDownClass(cls):
+        """
+        Stop the mock
+        """
+        cls.get_patcher.stop()
+
+    def test_public_repos(self):
+        """
+        Test the public_repos method with integration fixtures
+        """
+        client = GithubOrgClient('test_org')
+        repos = client.public_repos()
+        self.assertEqual(repos, self.expected_repos)
+
+    def test_public_repos_with_license(self):
+        """
+        Test the public_repos method with a specific license filter
+        """
+        client = GithubOrgClient('test_org')
+        repos = client.public_repos(license="apache-2.0")
+        self.assertEqual(repos, self.apache2_repos)
+
+class MockResponse:
+    def __init__(self, json_data):
+        self.json_data = json_data
+
+    def json(self):
+        return self.json_data
