@@ -13,6 +13,7 @@ class TestGithubOrgClient(unittest.TestCase):
     """
     Tests for GithubOrgClient class
     """
+
     @parameterized.expand([
         ("google"),
         ("abc")
@@ -73,6 +74,7 @@ class TestGithubOrgClient(unittest.TestCase):
 
 class TestIntegrationGithubOrgClient(unittest.TestCase):
     """tests for the `GithubOrgClient` class."""
+
     @classmethod
     def setUpClass(cls) -> None:
         """Sets up class fixtures before running tests."""
